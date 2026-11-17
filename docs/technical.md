@@ -74,6 +74,11 @@ placeholders:
 All eight render in English, Hindi and Gujarati. The Accused Face Identification Form is an
 enum value with no template and does not generate.
 
+Output language is chosen per generation. On the Documents tab it is an explicit selector,
+seeded from the UI locale but owned by the officer thereafter — changing the UI locale does
+not rewrite it. The case Assistant tab has no such selector by design: it generates in the
+UI locale, so a document asked for in Hindi comes back in Hindi.
+
 **There is no LLM in the document path.** Every narrative sentence is assembled
 deterministically from per-language label templates in `templates/_labels.py`, with
 identifiers substituted verbatim. This is why generation is fast and repeatable, and why a

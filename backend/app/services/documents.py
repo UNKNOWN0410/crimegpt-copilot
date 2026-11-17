@@ -552,9 +552,14 @@ def generate_document(
             f"Invalid report_type {report_type!r}; expected one of {sorted(_REPORT_TYPES)}"
         )
 
-    # Resolve language: explicit lang wins, else the case's complaint language.
+    # Resolve language. An unrecognised code renders EN labels (_build_context falls
+    # back to LABELS["en"]), so it must be RECORDED as EN too — a document whose stored
+    # language disagrees with its own body is exactly the silent divergence this
+    # project exists to catch. Normalising here also keeps the demo-cache key honest.
     lang_key = (lang or "en").lower()
-    doc_language = _LANG_ENUM.get(lang_key, case.complaint_language)
+    if lang_key not in _LANG_ENUM:
+        lang_key = "en"
+    doc_language = _LANG_ENUM[lang_key]
 
     # DEMO_MODE (runtime-toggleable): serve the pre-generated context if present. Document
     # generation is deterministic now, so a miss simply falls through to the live build below.

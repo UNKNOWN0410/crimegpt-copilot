@@ -102,7 +102,10 @@ export default function DocumentsTab({
   }, [caseId, t]);
 
   useEffect(load, [load]);
-  useEffect(() => setLang(apiLang), [apiLang]);
+  // The OUTPUT language is the officer's own choice (seeded from the UI locale by
+  // useState above, then owned by the selector). It is deliberately NOT re-synced to
+  // apiLang: switching the UI locale must never silently rewrite a chosen output
+  // language out from under a generation.
 
   async function generate(docType: string) {
     setGenerating(docType);
